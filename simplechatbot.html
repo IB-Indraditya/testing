@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with ChatGPT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 300px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #user-input {
+            width: calc(100% - 70px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #send-btn {
+            width: 50px;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+        }
+
+        .message.user {
+            text-align: right;
+            color: #007bff;
+        }
+
+        .message.bot {
+            text-align: left;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will be inserted here dynamically -->
+        </div>
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-btn">Send</button>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        let context = {};
+
+        sendBtn.addEventListener('click', processUserInput);
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                processUserInput();
+            }
+        });
+
+        async function processUserInput() {
+            const userMessage = userInput.value.trim();
+            if (userMessage !== '') {
+                appendMessage('user', userMessage);
+                const botResponse = await getBotResponse(userMessage);
+                appendMessage('bot', botResponse);
+                userInput.value = '';
+            }
+        }
+
+        function appendMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender);
+            messageElement.innerHTML = `<div class="message-text">${message}</div>`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function getBotResponse(userMessage) {
+            // Simulate asynchronous call to a mock NLP service (replace with actual API call)
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const botResponse = generateBotResponse(userMessage);
+                    resolve(botResponse);
+                }, 1000); // Simulate delay
+            });
+        }
+        function fs() {
+            // body...
+            let mySound = new Audio('https://commondatastorage.googleapis.com/codeskulptor-assets/week7-button.m4a')
+            mySound.play()
+        }
+        function generateBotResponse(userMessage) {
+            // Mock intents and responses
+            console.log(1);
+            fs();
+            const intents = {
+                greeting: ['hello', 'hi', 'hey'],
+                thanks: ['thank', 'thanks'],
+                about: ['you', 'yourself'],
+                help: ['help', 'support', 'assistance'],
+                weather: ['weather'],
+                time: ['time', 'current time'],
+                joke: ['joke', 'funny'],
+                not: ['nothing','leave','no'],
+                zero:['zero','0'],
+                bye: ['bye','goodbye']
+
+            };
+
+            let botResponse = "I'm sorry, I didn't quite catch that. Could you please rephrase or ask something else?";
+
+            // Check for intents based on userMessage
+            for (const intent in intents) {
+                if (intents[intent].some(keyword => userMessage.toLowerCase().includes(keyword))) {
+                    switch (intent) {
+                        case 'greeting':
+                            botResponse = "Hello! How can I assist you today?";
+                            break;
+                        case 'thanks':
+                            botResponse = "You're welcome!";
+                            break;
+                        case 'about':
+                            botResponse = "I'm  a friendly chatbot here to help you.";
+                            break;
+                        case 'help':
+                            botResponse = "Sure! What do you need assistance with?";
+                            break;
+                        case 'weather':
+                            botResponse = "The weather is currently sunny with a temperature of 25°C.";
+                            break;
+                        case 'time':
+                            const now = new Date();
+                            botResponse = `The current time is ${now.toLocaleTimeString()}.`;
+                            break;
+                        case 'joke':
+                            botResponse = "Why don't scientists trust atoms? Because they make up everything!";
+                            break;
+                        case 'not':
+                            botResponse = "Okay Fine then";
+                            break;
+                        case 'zero':
+                            botResponse = "0 is the first numeric entity invented by famous Indian mathematician AryaBhatta";
+                            break;
+                        case 'bye':
+                            botResponse = "Have a nice day!";
+                            break;
+                        default:
+                            botResponse = "I'm sorry, I didn't quite catch that. Could you please rephrase or ask something else?";
+                    }
+                    break;
+                }
+            }
+
+            // Manage context based on user interaction (optional)
+            manageContext(userMessage);
+
+            return botResponse;
+        }
+
+        function manageContext(userMessage) {
+            // Example: Manage context based on user interactions
+            if (userMessage.toLowerCase().includes('time')) {
+                context.askedForTime = true;
+            }
+        }
+    </script>
+</body>
+</html>
